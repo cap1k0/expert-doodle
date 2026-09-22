@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.prose-bruca p {
+  margin-bottom: 1.1rem;
+  line-height: 1.75;
+}
+
+.prose-bruca h2 {
+  font-size: 1.35rem;
+  font-weight: 500;
+  margin: 2rem 0 0.75rem;
+}
+
+.prose-bruca a {
+  color: #1d4ed8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-bruca ul,
+.prose-bruca ol {
+  margin: 0 0 1.1rem 1.25rem;
+}
+
+.prose-bruca blockquote {
+  border-left: 2px solid #2563eb;
+  padding-left: 1rem;
+  color: #525252;
+  font-style: italic;
+  margin: 1.5rem 0;
+}
