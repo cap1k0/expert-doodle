@@ -6,15 +6,19 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://blog.bruca.space";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Bruca Blog — research on AI-assisted academic editing",
+    default: "Bruca Blog — AI, RAG & Technology",
     template: "%s — Bruca Blog",
   },
+  description:
+    "Notes on AI, retrieval-augmented generation, and the technology behind how we build — from the team at Bruca.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     siteName: "Bruca Blog",
+    description:
+      "Notes on AI, retrieval-augmented generation, and the technology behind how we build.",
     locale: "en_US",
     url: siteUrl,
   },
