@@ -22,9 +22,20 @@ export default async function BlogIndex() {
         </nav>
 
         <header className="mb-14">
-          <h1 className="mb-2 text-3xl font-medium leading-tight sm:text-4xl">
+          <div className="mb-3 flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-widest text-blue-700">
+            <span>AI</span>
+            <span className="text-neutral-300">/</span>
+            <span>RAG</span>
+            <span className="text-neutral-300">/</span>
+            <span>Technology</span>
+          </div>
+          <h1 className="mb-3 text-3xl font-medium leading-tight tracking-tight sm:text-4xl">
             Blog
           </h1>
+          <p className="max-w-xl text-neutral-600">
+            Notes on AI, retrieval-augmented generation, and the technology
+            behind how we build — plus whatever else is on our mind.
+          </p>
         </header>
 
         {articles.length === 0 ? (
