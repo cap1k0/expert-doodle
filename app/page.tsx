@@ -33,8 +33,7 @@ export default async function BlogIndex() {
             Blog
           </h1>
           <p className="max-w-xl text-neutral-600">
-            Notes on AI, retrieval-augmented generation, and the technology
-            behind how we build — plus whatever else is on our mind.
+            Notes on tech and research 
           </p>
         </header>
 
