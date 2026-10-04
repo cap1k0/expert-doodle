@@ -29,7 +29,7 @@ export default async function BlogIndex() {
             Blog
           </h1>
           <p className="max-w-xl text-neutral-600">
-            Read
+            
           </p>
         </header>
 
