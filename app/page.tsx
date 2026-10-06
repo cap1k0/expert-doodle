@@ -1,4 +1,3 @@
-```tsx
 import Link from "next/link";
 import { getPublishedArticles } from "./lib/cms";
 
@@ -10,7 +9,6 @@ export default async function BlogIndex() {
   return (
     <main className="min-h-screen bg-white text-neutral-900">
       <div className="mx-auto max-w-4xl px-6 py-10 sm:px-8 sm:py-14">
-        {/* Navigation */}
         <nav className="mb-20 flex items-center justify-between border-b border-neutral-200 pb-5">
           <span className="text-sm font-semibold tracking-tight text-neutral-900">
             BRUCA
@@ -24,7 +22,6 @@ export default async function BlogIndex() {
           </a>
         </nav>
 
-        {/* Header */}
         <header className="mb-16">
           <p className="mb-4 font-mono text-xs font-medium uppercase tracking-[0.2em] text-blue-700">
             Insights & Research
@@ -40,7 +37,6 @@ export default async function BlogIndex() {
           </p>
         </header>
 
-        {/* Articles */}
         {articles.length === 0 ? (
           <div className="border-t border-neutral-200 py-10">
             <p className="text-neutral-500">
@@ -52,29 +48,26 @@ export default async function BlogIndex() {
             {articles.map((article) => (
               <article
                 key={article.id}
-                className="group border-b border-neutral-200 py-9 transition-colors"
+                className="group border-b border-neutral-200 py-9"
               >
-                <Link
-                  href={`/${article.slug}`}
-                  className="block"
-                >
+                <Link href={`/${article.slug}`} className="block">
                   <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-neutral-400">
                     {article.publishedDate && (
                       <time dateTime={article.publishedDate}>
-                        {new Date(article.publishedDate).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }
-                        )}
+                        {new Date(
+                          article.publishedDate
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
                       </time>
                     )}
 
                     {article.categories?.length > 0 && (
                       <>
                         <span>·</span>
+
                         {article.categories.map((c) => (
                           <span
                             key={c.id}
@@ -111,4 +104,3 @@ export default async function BlogIndex() {
     </main>
   );
 }
-```
