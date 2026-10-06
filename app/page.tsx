@@ -64,20 +64,21 @@ export default async function BlogIndex() {
                       </time>
                     )}
 
-                    {article.categories?.length > 0 && (
-                      <>
-                        <span>·</span>
+                    {article.categories &&
+                      article.categories.length > 0 && (
+                        <>
+                          <span>·</span>
 
-                        {article.categories.map((c) => (
-                          <span
-                            key={c.id}
-                            className="font-medium text-blue-700"
-                          >
-                            {c.title}
-                          </span>
-                        ))}
-                      </>
-                    )}
+                          {article.categories.map((c) => (
+                            <span
+                              key={c.id}
+                              className="font-medium text-blue-700"
+                            >
+                              {c.title}
+                            </span>
+                          ))}
+                        </>
+                      )}
                   </div>
 
                   <h2 className="mb-3 max-w-3xl text-xl font-medium leading-snug tracking-tight transition-colors group-hover:text-blue-700 sm:text-2xl">
@@ -90,7 +91,7 @@ export default async function BlogIndex() {
                     </p>
                   )}
 
-                  {article.author?.length > 0 && (
+                  {article.author && article.author.length > 0 && (
                     <div className="mt-5 text-xs text-neutral-400">
                       By {article.author.map((a) => a.name).join(", ")}
                     </div>
