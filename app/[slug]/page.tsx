@@ -11,16 +11,20 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-// Pre-renders every published article at build time. New articles
-// published later are picked up on-demand via ISR without a redeploy.
 export async function generateStaticParams() {
   const articles = await getPublishedArticles();
-  return articles.map((a) => ({ slug: a.slug }));
+
+  return articles.map((a) => ({
+    slug: a.slug,
+  }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
+
   if (!article) return {};
 
   const authorNames = article.author?.map((a) => a.name).join(", ");
@@ -37,7 +41,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: article.abstract,
       publishedTime: article.publishedDate,
       authors: authorNames ? [authorNames] : undefined,
-      images: article.coverImage ? [{ url: article.coverImage.url }] : undefined,
+      images: article.coverImage
+        ? [{ url: article.coverImage.url }]
+        : undefined,
     },
     twitter: {
       card: "summary_large_image",
@@ -49,10 +55,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
-  const article = await getArticleBySlug(slug);
-  if (!article) notFound();
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://blog.bruca.space";
+  const article = await getArticleBySlug(slug);
+
+  if (!article) {
+    notFound();
+  }
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://blog.bruca.space";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -61,7 +72,10 @@ export default async function ArticlePage({ params }: Props) {
     description: article.abstract,
     datePublished: article.publishedDate,
     dateModified: article.updatedAt,
-    author: article.author?.map((a) => ({ "@type": "Person", name: a.name })),
+    author: article.author?.map((a) => ({
+      "@type": "Person",
+      name: a.name,
+    })),
     image: article.coverImage?.url,
     mainEntityOfPage: `${siteUrl}/${article.slug}`,
     publisher: {
@@ -72,69 +86,146 @@ export default async function ArticlePage({ params }: Props) {
   };
 
   return (
-    <main className="min-h-screen bg-white text-neutral-900">
+    <main className="min-h-screen bg-[#f7f7f5] text-[#111]">
+
+      {/* SEO structured data */}
       {/* eslint-disable-next-line react/no-danger */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd),
+        }}
       />
 
-      <div className="mx-auto max-w-3xl px-6 py-8">
-        <nav className="mb-14 flex items-center justify-between">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 lg:px-10">
+
+        {/* NAV */}
+        <nav className="flex items-center justify-between border-b border-black/10 py-6">
+
           <a href="https://bruca.space">
             <Logo />
           </a>
-          <Link href="/" className="text-sm text-neutral-600 hover:text-neutral-900">
-            ← All articles
+
+          <Link
+            href="/"
+            className="group flex items-center gap-2 text-sm text-black/50 transition-colors hover:text-black"
+          >
+            <span className="transition-transform group-hover:-translate-x-1">
+              ←
+            </span>
+            All articles
           </Link>
+
         </nav>
 
         <article>
-          {article.categories?.[0] && (
-            <p className="mb-3 text-sm font-medium text-blue-700">
-              {article.categories[0].title}
-            </p>
-          )}
 
-          <h1 className="mb-4 text-3xl font-medium leading-tight sm:text-4xl">
-            {article.title}
-          </h1>
+          {/* ARTICLE HEADER */}
+          <header className="mx-auto max-w-5xl border-b border-black/10 py-16 sm:py-24">
 
-          <div className="mb-10 flex flex-wrap items-center gap-3 text-sm text-neutral-500">
-            {article.author?.length > 0 && (
-              <span className="text-neutral-700">
-                {article.author.map((a) => a.name).join(", ")}
+            <div className="mb-7 flex flex-wrap items-center gap-3">
+
+              {article.categories?.map((category) => (
+                <span
+                  key={category.id}
+                  className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.14em] text-black/50"
+                >
+                  {category.title}
+                </span>
+              ))}
+
+              <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-black/30">
+                Bruca Journal
               </span>
-            )}
-            {article.publishedDate && (
-              <time dateTime={article.publishedDate}>
-                {new Date(article.publishedDate).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
-            )}
-          </div>
 
+            </div>
+
+            <h1 className="max-w-5xl text-4xl font-semibold leading-[1.02] tracking-[-0.055em] sm:text-6xl lg:text-7xl">
+              {article.title}
+            </h1>
+
+            {article.abstract && (
+              <p className="mt-8 max-w-3xl text-lg leading-8 text-black/50 sm:text-xl">
+                {article.abstract}
+              </p>
+            )}
+
+            <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-black/40">
+
+              {article.author?.length > 0 && (
+                <span className="font-medium text-black/65">
+                  By {article.author.map((a) => a.name).join(", ")}
+                </span>
+              )}
+
+              {article.publishedDate && (
+                <>
+                  <span className="text-black/20">•</span>
+
+                  <time dateTime={article.publishedDate}>
+                    {new Date(
+                      article.publishedDate
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                </>
+              )}
+
+            </div>
+
+          </header>
+
+          {/* COVER */}
           {article.coverImage && (
-            <img
-              src={article.coverImage.url}
-              alt={article.coverImage.alt || article.title}
-              className="mb-10 w-full rounded-lg border border-neutral-200"
-            />
+            <div className="mx-auto max-w-6xl py-10 sm:py-14">
+
+              <div className="overflow-hidden rounded-[1.5rem] border border-black/10 bg-white shadow-sm">
+
+                <img
+                  src={article.coverImage.url}
+                  alt={article.coverImage.alt || article.title}
+                  className="h-auto w-full object-cover"
+                />
+
+              </div>
+
+            </div>
           )}
 
-          {article.abstract && (
-            <p className="mb-10 border-l-2 border-blue-600 pl-4 text-lg italic text-neutral-700">
-              {article.abstract}
-            </p>
-          )}
+          {/* CONTENT */}
+          <div className="mx-auto max-w-3xl pb-24 sm:pb-32">
 
-          <div className="prose-bruca max-w-none text-base text-neutral-800">
-            <RichText data={article.editedText} />
+            <div className="prose-bruca text-black/75">
+              <RichText data={article.editedText} />
+            </div>
+
           </div>
+
         </article>
+
+        {/* FOOTER */}
+        <footer className="border-t border-black/10 py-10">
+
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+
+            <Link
+              href="/"
+              className="text-sm font-medium transition-opacity hover:opacity-50"
+            >
+              ← Back to Bruca Journal
+            </Link>
+
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/30">
+              AI · Language · Bias
+            </span>
+
+          </div>
+
+        </footer>
+
       </div>
     </main>
   );
