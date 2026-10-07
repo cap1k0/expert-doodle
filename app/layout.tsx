@@ -25,6 +25,15 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
+  // Trustpilot domain verification (فقط اگه NEXT_PUBLIC_TP_VERIFY_ID ست شده باشه)
+  ...(process.env.NEXT_PUBLIC_TP_VERIFY_ID
+    ? {
+        other: {
+          "trustpilot-one-time-domain-verification-id":
+            process.env.NEXT_PUBLIC_TP_VERIFY_ID,
+        },
+      }
+    : {}),
   robots: {
     index: true,
     follow: true,
