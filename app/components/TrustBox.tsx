@@ -15,9 +15,15 @@ const TEMPLATES = {
   micro: process.env.NEXT_PUBLIC_TP_TEMPLATE_MICRO,
   mini: process.env.NEXT_PUBLIC_TP_TEMPLATE_MINI,
   collector: process.env.NEXT_PUBLIC_TP_TEMPLATE_COLLECTOR,
+  carousel: process.env.NEXT_PUBLIC_TP_TEMPLATE_CAROUSEL,
 } as const;
 
-const HEIGHTS = { micro: "24px", mini: "150px", collector: "52px" } as const;
+const HEIGHTS = {
+  micro: "24px",
+  mini: "150px",
+  collector: "52px",
+  carousel: "140px",
+} as const;
 
 type Props = {
   variant?: keyof typeof TEMPLATES;
@@ -61,6 +67,8 @@ export default function TrustBox({
         data-style-height={HEIGHTS[variant]}
         data-style-width="100%"
         data-theme={theme}
+        data-stars="4,5"
+        data-review-languages="en"
         {...(token ? { "data-token": token } : {})}
       >
         <a href={profileUrl} target="_blank" rel="noopener noreferrer">
