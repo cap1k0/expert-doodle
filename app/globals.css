@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --ink: #15131c;
+  --paper: #faf8f5;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -16,16 +21,15 @@ body {
     Helvetica,
     Arial,
     sans-serif;
-
-  background: #f7f7f5;
-  color: #111;
+  background: var(--paper);
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: #111;
-  color: #fff;
+  background: #c4b5fd;
+  color: var(--ink);
 }
 
 a {
@@ -37,7 +41,121 @@ img {
   max-width: 100%;
 }
 
-/* Editorial article typography */
+/* ───────── a world that is neither one thing nor the other ───────── */
+
+/* slow drifting colour field behind everything */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -15%;
+  z-index: -2;
+  background:
+    radial-gradient(40rem 32rem at 12% 8%, rgba(196, 181, 253, 0.55), transparent 60%),
+    radial-gradient(36rem 30rem at 92% 14%, rgba(253, 186, 155, 0.5), transparent 60%),
+    radial-gradient(40rem 34rem at 70% 92%, rgba(167, 240, 210, 0.5), transparent 60%),
+    radial-gradient(30rem 26rem at 5% 85%, rgba(253, 230, 138, 0.45), transparent 60%);
+  animation: drift 28s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* fine grain so the colour feels like air, not a flat gradient */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+@keyframes drift {
+  from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  to   { transform: translate3d(3%, -2%, 0) rotate(6deg) scale(1.08); }
+}
+
+@keyframes morph {
+  0%, 100% { border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; }
+  33%      { border-radius: 63% 37% 41% 59% / 55% 61% 39% 45%; }
+  66%      { border-radius: 37% 63% 56% 44% / 48% 38% 62% 52%; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shift {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}
+
+/* a shape that never settles */
+.blob {
+  border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+  animation: morph 14s ease-in-out infinite;
+}
+
+/* the big iridescent orb in the hero */
+.orb {
+  border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+  background: conic-gradient(
+    from 0deg,
+    #c4b5fd,
+    #fdba9b,
+    #fde68a,
+    #a7f0d2,
+    #93c5fd,
+    #c4b5fd
+  );
+  filter: blur(2px) saturate(1.1);
+  animation:
+    morph 16s ease-in-out infinite,
+    spin 48s linear infinite;
+}
+
+/* text whose colour keeps changing its mind */
+.text-fluid {
+  background: linear-gradient(100deg, #7c5cff, #ff7a59, #f5b700, #18b88a, #7c5cff);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shift 10s ease-in-out infinite alternate;
+}
+
+/* frosted surfaces */
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 20px 50px -24px rgba(80, 60, 140, 0.2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  .blob,
+  .orb,
+  .text-fluid {
+    animation: none;
+  }
+}
+
+/* ───────── article typography ───────── */
 
 .prose-bruca {
   font-size: 1.08rem;
@@ -67,18 +185,18 @@ img {
 
 .prose-bruca strong {
   font-weight: 650;
-  color: #111;
+  color: var(--ink);
 }
 
 .prose-bruca a {
-  color: #155eef;
+  color: #6d4aff;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
 }
 
 .prose-bruca a:hover {
-  color: #111;
+  color: var(--ink);
 }
 
 .prose-bruca ul,
@@ -94,15 +212,16 @@ img {
 .prose-bruca blockquote {
   margin: 2rem 0;
   padding: 1rem 1.25rem;
-  border-left: 2px solid #111;
-  background: rgba(0, 0, 0, 0.025);
+  border-left: 3px solid;
+  border-image: linear-gradient(to bottom, #7c5cff, #ff7a59, #18b88a) 1;
+  background: rgba(255, 255, 255, 0.5);
   color: #444;
   font-style: italic;
 }
 
 .prose-bruca code {
   border-radius: 0.35rem;
-  background: #eee;
+  background: rgba(255, 255, 255, 0.7);
   padding: 0.15rem 0.35rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.9em;
@@ -111,8 +230,8 @@ img {
 .prose-bruca pre {
   overflow-x: auto;
   margin: 2rem 0;
-  border-radius: 1rem;
-  background: #111;
+  border-radius: 1.25rem;
+  background: var(--ink);
   padding: 1.25rem;
   color: #fff;
 }
@@ -128,28 +247,26 @@ img {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* Better article images */
-
 .prose-bruca img {
   margin: 2rem auto;
-  border-radius: 1rem;
+  border-radius: 1.25rem;
 }
 
-/* Subtle scrollbar */
+/* scrollbar */
 
 ::-webkit-scrollbar {
   width: 9px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f7f7f5;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d0d0cc;
+  background: #d9d2f5;
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #999;
+  background: #b4a6ee;
 }
