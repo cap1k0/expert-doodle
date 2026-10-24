@@ -17,13 +17,18 @@ export type CardArticle = {
   minutes: number;
 };
 
-export const GRADIENTS = [
-  "from-blue-600 to-indigo-800",
-  "from-emerald-500 to-teal-800",
-  "from-orange-400 to-rose-600",
-  "from-violet-500 to-fuchsia-800",
-  "from-slate-600 to-slate-900",
+// Soft three-colour fields — no hard edges, nothing is one colour.
+const MESHES: [string, string, string][] = [
+  ["#c4b5fd", "#fdba9b", "#a7f0d2"],
+  ["#a7f0d2", "#fde68a", "#c4b5fd"],
+  ["#fdba9b", "#f9a8d4", "#fde68a"],
+  ["#93c5fd", "#c4b5fd", "#a7f0d2"],
+  ["#fde68a", "#a7f0d2", "#fdba9b"],
 ];
+
+function mesh([a, b, c]: [string, string, string]) {
+  return `radial-gradient(60% 70% at 20% 20%, ${a}, transparent 70%), radial-gradient(60% 70% at 85% 30%, ${b}, transparent 70%), radial-gradient(70% 80% at 50% 100%, ${c}, transparent 70%), #f3efff`;
+}
 
 export function Cover({
   article,
@@ -47,10 +52,11 @@ export function Cover({
   }
   return (
     <div
-      className={`relative flex h-full w-full items-end bg-gradient-to-br p-6 ${GRADIENTS[index % GRADIENTS.length]} ${className}`}
+      className={`relative flex h-full w-full items-center justify-center overflow-hidden ${className}`}
+      style={{ background: mesh(MESHES[index % MESHES.length]) }}
     >
-      <div className="absolute inset-0 opacity-30 [background-image:radial-gradient(rgba(255,255,255,0.5)_1px,transparent_1px)] [background-size:18px_18px]" />
-      <span className="relative text-6xl font-semibold tracking-[-0.06em] text-white/90">
+      <div className="blob absolute aspect-square h-2/3 bg-white/35 backdrop-blur-md" />
+      <span className="relative text-6xl font-semibold tracking-[-0.06em] text-black/70">
         {article.title.trim().charAt(0).toUpperCase()}
       </span>
     </div>
@@ -80,14 +86,9 @@ export default function ArticleExplorer({
   return (
     <section className="py-14 sm:py-20">
       <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.25em] text-black/40">
-            Latest
-          </p>
-          <h2 className="text-3xl font-medium tracking-[-0.035em] sm:text-4xl">
-            Recent thinking
-          </h2>
-        </div>
+        <h2 className="text-3xl font-medium tracking-[-0.035em] sm:text-4xl">
+          Recent thinking
+        </h2>
 
         {categories.length > 2 && (
           <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
@@ -95,10 +96,10 @@ export default function ArticleExplorer({
               <button
                 key={c}
                 onClick={() => setActive(c)}
-                className={`shrink-0 rounded-full border px-4 py-2 text-xs font-medium transition-colors ${
+                className={`shrink-0 rounded-full px-4 py-2 text-xs font-medium transition-all ${
                   active === c
-                    ? "border-black bg-black text-white"
-                    : "border-black/10 bg-white text-black/55 hover:border-black/30 hover:text-black"
+                    ? "bg-[#15131c] text-white"
+                    : "chip text-black/55 hover:text-black"
                 }`}
               >
                 {c}
@@ -111,47 +112,53 @@ export default function ArticleExplorer({
       {visible.length === 0 ? (
         <p className="py-10 text-black/45">Nothing in this category yet.</p>
       ) : (
-        <div className="grid gap-x-7 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {visible.map((a, i) => (
-            <Link key={a.id} href={`/${a.slug}`} className="group flex flex-col">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-black/10 bg-white">
+            <Link
+              key={a.id}
+              href={`/${a.slug}`}
+              className="group glass flex flex-col overflow-hidden rounded-[1.75rem] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_70px_-25px_rgba(124,92,255,0.35)]"
+            >
+              <div className="relative aspect-[16/10] overflow-hidden">
                 <Cover
                   article={a}
                   index={i + startIndex}
                   className="transition-transform duration-700 group-hover:scale-105"
                 />
                 {a.categories[0] && (
-                  <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-black/70 backdrop-blur">
+                  <span className="chip absolute left-3 top-3 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-black/70">
                     {a.categories[0]}
                   </span>
                 )}
               </div>
 
-              <div className="mt-5 flex items-center gap-2 text-xs text-black/40">
-                {a.publishedDate && (
-                  <time dateTime={a.publishedDate}>
-                    {formatDate(a.publishedDate, "short")}
-                  </time>
+              <div className="flex flex-1 flex-col p-6">
+                <div className="flex items-center gap-2 text-xs text-black/40">
+                  {a.publishedDate && (
+                    <time dateTime={a.publishedDate}>
+                      {formatDate(a.publishedDate, "short")}
+                    </time>
+                  )}
+                  <span>•</span>
+                  <span>{a.minutes} min read</span>
+                </div>
+
+                <h3 className="mt-3 text-xl font-medium leading-snug tracking-[-0.025em] transition-colors group-hover:text-violet-600">
+                  {a.title}
+                </h3>
+
+                {a.abstract && (
+                  <p className="mt-3 line-clamp-3 text-sm leading-6 text-black/50">
+                    {a.abstract}
+                  </p>
                 )}
-                <span>•</span>
-                <span>{a.minutes} min read</span>
-              </div>
 
-              <h3 className="mt-2 text-xl font-medium leading-snug tracking-[-0.025em] transition-colors group-hover:text-blue-600 sm:text-2xl">
-                {a.title}
-              </h3>
-
-              {a.abstract && (
-                <p className="mt-3 line-clamp-3 text-sm leading-6 text-black/50">
-                  {a.abstract}
-                </p>
-              )}
-
-              <div className="mt-5 flex items-center justify-between text-xs text-black/40">
-                <span>{a.authors.join(", ")}</span>
-                <span className="text-base transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
+                <div className="mt-auto flex items-center justify-between pt-5 text-xs text-black/40">
+                  <span>{a.authors.join(", ")}</span>
+                  <span className="text-base transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
+                </div>
               </div>
             </Link>
           ))}
