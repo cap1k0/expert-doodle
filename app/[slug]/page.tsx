@@ -91,7 +91,7 @@ export default async function ArticlePage({ params }: Props) {
   const shareUrl = encodeURIComponent(url);
 
   return (
-    <main className="min-h-screen bg-[#f7f7f5] text-[#111]">
+    <main className="min-h-screen">
       <ReadingProgress />
 
       <script
@@ -117,7 +117,7 @@ export default async function ArticlePage({ params }: Props) {
               {article.categories?.map((category) => (
                 <span
                   key={category.id}
-                  className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.14em] text-black/55"
+                  className="chip px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.14em] text-black/60"
                 >
                   {category.title}
                 </span>
@@ -137,7 +137,7 @@ export default async function ArticlePage({ params }: Props) {
             <div className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-black/10 pt-6 text-sm text-black/45">
               {article.author?.length > 0 && (
                 <span className="flex items-center gap-2 font-medium text-black/70">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black text-[11px] font-semibold text-white">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 via-orange-300 to-emerald-300 text-[11px] font-semibold text-black/80">
                     {article.author[0].name.charAt(0).toUpperCase()}
                   </span>
                   {article.author.map((a) => a.name).join(", ")}
@@ -159,7 +159,7 @@ export default async function ArticlePage({ params }: Props) {
           {/* COVER */}
           {article.coverImage && (
             <div className="mx-auto max-w-5xl pb-12 sm:pb-16">
-              <div className="overflow-hidden rounded-[1.5rem] border border-black/10 bg-white shadow-sm">
+              <div className="glass overflow-hidden rounded-[1.75rem]">
                 <Cover
                   article={{
                     title: article.title,
@@ -185,7 +185,7 @@ export default async function ArticlePage({ params }: Props) {
                 href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-medium transition-colors hover:bg-black hover:text-white"
+                className="chip px-4 py-2 text-xs font-medium transition-colors hover:bg-[#15131c] hover:text-white"
               >
                 X / Twitter
               </a>
@@ -193,7 +193,7 @@ export default async function ArticlePage({ params }: Props) {
                 href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-medium transition-colors hover:bg-black hover:text-white"
+                className="chip px-4 py-2 text-xs font-medium transition-colors hover:bg-[#15131c] hover:text-white"
               >
                 LinkedIn
               </a>
@@ -207,18 +207,18 @@ export default async function ArticlePage({ params }: Props) {
             <h2 className="mb-10 text-2xl font-medium tracking-[-0.035em] sm:text-3xl">
               Keep reading
             </h2>
-            <div className="grid gap-px overflow-hidden rounded-2xl border border-black/10 bg-black/10 md:grid-cols-3">
+            <div className="grid gap-5 md:grid-cols-3">
               {related.map((a) => (
                 <Link
                   key={a.id}
                   href={`/${a.slug}`}
-                  className="group flex min-h-[220px] flex-col justify-between bg-[#f7f7f5] p-7 transition-colors hover:bg-white"
+                  className="group glass flex min-h-[220px] flex-col justify-between rounded-[1.75rem] p-7 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_70px_-25px_rgba(124,92,255,0.35)]"
                 >
                   <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-black/35">
                     {a.categories?.[0]?.title ?? "Article"}
                   </span>
                   <div>
-                    <h3 className="text-lg font-medium leading-snug tracking-[-0.02em] transition-colors group-hover:text-blue-600">
+                    <h3 className="text-lg font-medium leading-snug tracking-[-0.02em] transition-colors group-hover:text-violet-600">
                       {a.title}
                     </h3>
                     <span className="mt-4 block text-xs text-black/40">
