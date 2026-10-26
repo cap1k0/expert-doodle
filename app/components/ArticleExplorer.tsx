@@ -40,12 +40,16 @@ export function Cover({
   className?: string;
 }) {
   if (article.cover) {
+    // index 0 = تصویر بالای صفحه: فوری لود شود
+    const first = index === 0;
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={article.cover}
         alt={article.coverAlt || article.title}
-        loading="lazy"
+        loading={first ? "eager" : "lazy"}
+        decoding="async"
+        {...(first ? { fetchPriority: "high" as const } : {})}
         className={`h-full w-full object-cover ${className}`}
       />
     );
@@ -55,7 +59,7 @@ export function Cover({
       className={`relative flex h-full w-full items-center justify-center overflow-hidden ${className}`}
       style={{ background: mesh(MESHES[index % MESHES.length]) }}
     >
-      <div className="blob absolute aspect-square h-2/3 bg-white/35 backdrop-blur-md" />
+      <div className="blob absolute aspect-square h-2/3 bg-white/35" />
       <span className="relative text-6xl font-semibold tracking-[-0.06em] text-black/70">
         {article.title.trim().charAt(0).toUpperCase()}
       </span>
