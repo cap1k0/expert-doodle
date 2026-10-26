@@ -49,12 +49,12 @@ export default async function BlogIndex() {
             <h1 className="text-5xl font-semibold leading-[0.95] tracking-[-0.055em] sm:text-7xl lg:text-8xl">
               Thinking about
               <br />
-              <span className="text-fluid">AI, language &amp; bias.</span>
+              <span className="text-fluid">futuristic progressive world.</span>
             </h1>
 
             <p className="mt-9 max-w-xl text-base leading-7 text-black/55 sm:text-lg">
-              Research, experiments, and ideas on how artificial intelligence
-              is changing language, creativity, and human work.
+               experiments and ideas on how  intelligence
+              is changing creativity, and human work.
             </p>
           </div>
         </section>
