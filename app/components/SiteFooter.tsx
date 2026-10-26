@@ -1,13 +1,18 @@
+import dynamic from "next/dynamic";
 import TrustBox from "./TrustBox";
 import Logo from "./Logo";
-import DonateSection from "./DonateSection";
+import { SHOW_DONATE } from "../config";
+
+const DonateSection = dynamic(() => import("./DonateSection"));
 
 export default function SiteFooter() {
   return (
     <footer className="mt-10 py-12">
-      <DonateSection />
+      {SHOW_DONATE && <DonateSection />}
 
-      <div className="mt-12 border-t border-black/10 pt-12">
+      <div
+        className={`${SHOW_DONATE ? "mt-12" : ""} border-t border-black/10 pt-12`}
+      >
         <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Logo />
