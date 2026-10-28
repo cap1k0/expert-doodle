@@ -17,7 +17,7 @@ export default function SiteFooter() {
           <div>
             <Logo />
             <p className="mt-3 max-w-xs text-sm leading-6 text-black/45">
-              Research, experiments and ideas on AI, language and bias.
+              Research, experiments and ideas on Bruca.
             </p>
           </div>
 
